@@ -788,10 +788,17 @@ function convert(openapi, options, callback) {
                 }
             }
 
-            data = options.templateCallback('schema_properties', 'pre', data);
+            const rootProps = [];
+            data.schemaProperties.forEach(function(prop) {
+                if (prop.depth === 0) {
+                    rootProps.push(prop);
+                }
+            });
+            const oneLevelData = Object.assign({}, data, { schemaProperties: rootProps });
+            data = options.templateCallback('schema_properties', 'pre', oneLevelData);
             if (data.append) { content += data.append; delete data.append; }
             content += templates.schema_properties(data) + '\n';
-            data = options.templateCallback('schema_properties', 'post', data);
+            data = options.templateCallback('schema_properties', 'post', oneLevelData);
             if (data.append) { content += data.append; delete data.append; }
 
         }
