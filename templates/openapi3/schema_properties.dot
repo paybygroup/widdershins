@@ -1,8 +1,8 @@
 ### Properties
 
-Name|Type|Required|Description
----|---|---|---|
-{{~ data.schemaProperties :p}}{{=p.name}}|{{=p.type}}|{{=p.required}}|{{=p.description}}
+Name|Type|Description
+---|---|---|
+{{~ data.schemaProperties :p}}{{=p.name}}|{{=p.type}}|{{=p.description}}
 {{~}}
 
 {{? data.enums.length}}

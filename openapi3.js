@@ -151,7 +151,7 @@ function processOperation(op, method, resource, options) {
         body.name = 'body';
         body.in = 'body';
         body.required = op.requestBody.required;
-        body.description = op.requestBody.description ? op.requestBody.description : 'No description';
+        body.description = op.requestBody.description ? op.requestBody.description : 'Request body object.';
         body.schema = op.requestBody.content[Object.keys(op.requestBody.content)[0]].schema;
         if (body.schema && typeof body.schema.$ref === 'string') {
             rbType = body.schema.$ref.replace('#/components/schemas/','');
@@ -311,8 +311,8 @@ function processOperation(op, method, resource, options) {
         var longDescs = false;
         for (var p in parameters) {
             param = parameters[p];
-            param.shortDesc = (typeof param.description === 'string') ? param.description.split('\n')[0] : 'No description';
-            if ((typeof param.description === 'string') && (param.description.trim().split('\n').length > 1)) longDescs = true;
+            param.shortDesc = (typeof param.description === 'string') ? param.description.replace(/\n/g, '<br/>') : 'No description';
+            // if ((typeof param.description === 'string') && (param.description.trim().split('\n').length > 1)) longDescs = true;
             param.originalType = param.type;
             param.type = param.safeType;
 
@@ -447,6 +447,10 @@ function processOperation(op, method, resource, options) {
                     }
                     else if ((Object.keys(mediatype.schema).length == 1) && (mediatype.schema.type)) {
                         response.schema = mediatype.schema.type;
+                    }
+                    else if ((Object.keys(mediatype.schema).length == 2) && (mediatype.schema.type === 'array')) {
+                        let ref = mediatype.schema.items.$ref.split('/').pop();
+                        response.schema = '[['+ref+'](#schema'+common.gfmLink(ref)+')]';
                     }
                     else if ((Object.keys(mediatype.schema).length == 2) && (mediatype.schema.type) && (mediatype.schema.format)) {
                         response.schema = mediatype.schema.type+'('+mediatype.schema.format+')';
