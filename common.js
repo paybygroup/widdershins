@@ -131,7 +131,7 @@ function extract(o,parent,seen,depth,callback){
                     else {
                         throw new Error('Max schema depth exceeded');
                     }
-                 }
+                }
             }
         }
         if (v && v.type && v.type === 'array' && v.items) { // array processing
@@ -139,6 +139,7 @@ function extract(o,parent,seen,depth,callback){
             var dummy = {};
             dummy.properties = {};
             dummy.properties[name] = v.items;
+            dummy.properties[name].required = v.required;
             dummy.properties[name].description = v.description;
             dummy.properties[name]["x-widdershins-isArray"] = true;
             extract(dummy,k,seen,depth,callback);
@@ -169,7 +170,7 @@ function schemaToArray(schema,depth,lines,trim) {
                     prop.type = '['+prop.type+']';
                 }
 
-                prop.required = required;
+                prop.required = required || obj[p].required;
                 prop.description = (obj[p].description && obj[p].description !== 'undefined') ? obj[p].description : 'No description'; // the actual string 'undefined'
                 if (trim && typeof prop.description === 'string') prop.description = prop.description.split('\n').join(' ');
                 prop.depth = depth;
