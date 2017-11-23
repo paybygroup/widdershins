@@ -37,13 +37,18 @@ function dereference(obj, circles, api, cloneFunc, aggressive) {
         obj["x-widdershins-oldRef"] = oRef;
     }
     var changes = 1;
+    var description;
     while (changes > 0) {
         changes = 0;
         recurse(obj, {}, function (obj, state) {
             if ((state.key === '$ref') && (typeof obj === 'string') && (!circFunc(circles, obj))) {
+                description = state.parents[state.parents.length - 2][state.keys[state.keys.length - 2]].description;
                 state.parents[state.parents.length - 2][state.keys[state.keys.length - 2]] = cloneFunc(jptr.jptr(api, obj));
                 state.parents[state.parents.length - 2][state.keys[state.keys.length - 2]]["x-widdershins-oldRef"] = obj;
                 if (state.parents[state.parents.length - 2][state.keys[state.keys.length - 2]] === false) console.error('Error dereferencing '+obj);
+                if (description) {
+                    state.parents[state.parents.length - 2][state.keys[state.keys.length - 2]].description = description;
+                }
                 delete state.parent["$ref"]; // just in case
                 changes++;
             }

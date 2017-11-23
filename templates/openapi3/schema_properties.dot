@@ -1,3 +1,5 @@
+{{=data.schema.description}}
+
 ### Properties
 
 Name|Type|Description
