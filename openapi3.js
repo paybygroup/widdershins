@@ -781,7 +781,7 @@ function convert(openapi, options, callback) {
             common.schemaToArray(schema,0,data.schemaProperties,true);
 
             for (let p of data.schemaProperties) {
-                if (p.schema && p.schema.enum) {
+                if (p.schema && p.schema.enum && p.depth === 0) {
                     for (let e of p.schema.enum) {
                         data.enums.push({name:p.name,value:e});
                     }
