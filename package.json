@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pbg:docs": "node widdershins.js ~/paybygroup/hodor/docs/swagger.yml -y -o ~/paybygroup/slate/source/index.html.md -c"
+    "pbg:docs": "node widdershins.js ../hodor/docs/swagger.yml -y -o ../slate/source/index.html.md -c"
   },
   "repository": {
     "type": "git",
